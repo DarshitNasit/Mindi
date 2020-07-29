@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/css/style.css" />
+		<link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+		<title>Nasit Chats</title>
+	</head>
+
+	<body>
+		<div id="username-page">
+			<div class="username-page-container">
+				<form id="usernameForm" name="usernameForm">
+					<div class="form-group">
+						<h2>Room</h2>
+						<input
+							type="radio"
+							name="room-type"
+							id="join-room"
+							required
+							onchange="enableJoinText()"
+						/>
+						<label for="join-room">Join Room</label>
+						<input
+							type="radio"
+							name="room-type"
+							id="create-room"
+							required
+							onchange="disableJoinText()"
+						/>
+						<label for="create-room">Create Room</label>
+					</div>
+
+					<div id="join-room-text" class="form-group hidden">
+						<h2>Room ID:</h2>
+						<input
+							type="text"
+							id="room-id"
+							autocomplete="off"
+							placeholder="Room id"
+							class="form-control"
+						/>
+					</div>
+
+					<div class="form-group">
+						<h2>Username</h2>
+						<input
+							type="text"
+							id="user-name"
+							placeholder="Username"
+							autocomplete="off"
+							class="form-control"
+							required
+						/>
+					</div>
+
+					<div class="form-group">
+						<button type="submit" class="accent username-submit">Start Chatting</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+		<script src="/js/index.js"></script>
+	</body>
+</html>
