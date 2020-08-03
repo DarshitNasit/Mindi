@@ -15,7 +15,7 @@ const startGameButton = document.getElementById("start-game-btn");
 const copyButton = document.getElementById("copy-button");
 const playersArea = document.getElementById("players-area");
 const myArea = document.getElementById("my-area");
-const URL = "http://localhost:5000";
+const URL = "https://mindi-friends.herokuapp.com";
 
 let userId = null;
 let userName = null;
