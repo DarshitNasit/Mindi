@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StartGameMessage {
+public class NextTurn {
     private MessageType type;
-    private int decks;
-    private Card[] cards;
     private int firstPlayer;
+    private int indexId;
+    private Card card;
 }

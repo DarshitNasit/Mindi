@@ -1,8 +1,6 @@
 package com.nasit.knttrial1.services;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +21,7 @@ public class EventListeners {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventListeners.class);
 
 	@Autowired
-	private Hashtable<String, ArrayList<Pair<String, String>>> rooms;
+	private Map<String, Pair<List<Pair<String, String>>, Boolean>> rooms;
 
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
@@ -35,12 +33,13 @@ public class EventListeners {
 		final String userId = headerAccessor.getSessionAttributes().get("userId").toString();
 		final String userName = headerAccessor.getSessionAttributes().get("userName").toString();
 		final String roomId = headerAccessor.getSessionAttributes().get("roomId").toString();
+		final Pair<List<Pair<String, String>>, Boolean> room = rooms.get(roomId);
 
 		LOGGER.info("WebSocket disconnected of user: " + userName + ", " + userId);
 		LOGGER.info("Removing user from room: " + roomId);
 
-		rooms.get(roomId).remove(new Pair<String, String>(userId, userName));
-		if (rooms.get(roomId).size() == 0) {
+		room.getFirst().remove(new Pair<>(userId, userName));
+		if (room.getFirst().size() == 0) {
 			rooms.remove(roomId);
 			LOGGER.info("Deleted room: " + roomId);
 		}
@@ -49,7 +48,7 @@ public class EventListeners {
 
 			final ConnectionMessage message = new ConnectionMessage();
 			message.setType(MessageType.LEAVE);
-			message.setPlayers(Arrays.asList(new Pair<String, String>(userId, userName)));
+			message.setPlayers(Collections.singletonList(new Pair<>(userId, userName)));
 			simpMessagingTemplate.convertAndSend("/topic/" + roomId, message);
 
 			LOGGER.info("Published: Left user");

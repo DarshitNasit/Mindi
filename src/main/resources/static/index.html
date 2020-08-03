@@ -69,21 +69,24 @@
 		<div id="game-page" class="hidden">
 			<div id="score-board">
 				<h2>Mindi</h2>
-				<hr />
 				<div class="team-a">
+					<hr />
 					<h3>Team A</h3>
 					<ul id="players-a" class="list-group"></ul>
 					<div class="scores hidden">
 						<h5 id="hands-a" class="hands"></h5>
+						<h5 id="hakam-a" class="hakam"></h5>
 						<ul id="team-a-mindies" class="score-img-list"></ul>
 					</div>
 				</div>
-				<hr />
+
 				<div class="team-b">
+					<hr />
 					<h3>Team B</h3>
 					<ul id="players-b" class="list-group"></ul>
-					<div class="scores">
+					<div class="scores hidden">
 						<h5 id="hands-b" class="hands"></h5>
+						<h5 id="hakam-b" class="hakam"></h5>
 						<ul id="team-b-mindies" class="score-img-list"></ul>
 					</div>
 				</div>
@@ -91,16 +94,24 @@
 
 			<div id="game-area">
 				<div class="header">
-					<button id="copy-button" class="btn btn-raised btn-info">Room ID</button>
-					<input id="room-id-info" type="text" disabled></input>
-					<button id="start-game-btn" class="btn btn-raised btn-primary start-game-btn" disabled>Start Game</button>
-					<div class="form-group decks-input">
-						<label for="decks">Number of Decks:</label>
-						<select name="decks" id="decks" disabled>
-							<option value="1">1</option>
-							<option value="2">2</option>
-						</select>
+					<div>
+						<button id="copy-button" class="btn btn-raised btn-info">Room ID</button>
+						<input id="room-id-info" type="text" disabled />
 					</div>
+					<div>
+						<button id="start-game-btn" class="btn btn-raised btn-primary">Start Game</button>
+						<div class="form-group decks-input">
+							<label for="decks">Number of Decks:</label>
+							<select name="decks" id="decks" disabled>
+								<option value="1">1</option>
+								<option value="2">2</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div>
+					<div id="players-area"></div>
+					<div id="my-area" class="my-area"></div>
 				</div>
 			</div>
 		</div>

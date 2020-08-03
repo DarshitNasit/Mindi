@@ -1,9 +1,9 @@
 package com.nasit.knttrial1.controllers;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-
+import com.nasit.knttrial1.models.ConnectionMessage;
+import com.nasit.knttrial1.models.MessageType;
+import com.nasit.knttrial1.models.Pair;
+import com.nasit.knttrial1.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +12,11 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.groovy.GroovyMarkupConfig;
 
-import com.nasit.knttrial1.models.ConnectionMessage;
-import com.nasit.knttrial1.models.MessageType;
-import com.nasit.knttrial1.models.Pair;
-import com.nasit.knttrial1.models.User;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @MessageMapping("/rooms")
@@ -25,7 +25,7 @@ public class RoomMessageController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RoomMessageController.class);
 
 	@Autowired
-	private Hashtable<String, ArrayList<Pair<String, String>>> rooms;
+	private Map<String, Pair<List<Pair<String, String>>, Boolean>> rooms;
 
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
@@ -39,8 +39,11 @@ public class RoomMessageController {
 
 		LOGGER.info("Create room request from user: " + user.getUserDetails());
 
-		rooms.put(roomId, new ArrayList<>());
-		rooms.get(roomId).add(new Pair<String, String>(userId, userName));
+		final Pair<List<Pair<String, String>>, Boolean> room = new Pair<>();
+		room.setFirst(new ArrayList<>());
+		room.getFirst().add(new Pair<>(userId, userName));
+		room.setSecond(false);
+		rooms.put(roomId, room);
 
 		LOGGER.info("New room created: " + roomId);
 
@@ -55,11 +58,12 @@ public class RoomMessageController {
 		final String userId = user.getUserId();
 		final String userName = user.getUserName();
 		final String roomId = user.getRoomId();
+		final Pair<List<Pair<String, String>>, Boolean> room = rooms.get(roomId);
 
 		LOGGER.info("Joining room request from user: " + user.getUserDetails());
 		LOGGER.info("Joining room: " + roomId);
 
-		rooms.get(roomId).add(new Pair<String, String>(userId, userName));
+		room.getFirst().add(new Pair<>(userId, userName));
 
 		headerAccessor.getSessionAttributes().put("userId", userId);
 		headerAccessor.getSessionAttributes().put("userName", userName);
@@ -68,14 +72,9 @@ public class RoomMessageController {
 		LOGGER.info("User: " + user.getUserDetails() + ", added into room: " + roomId);
 		LOGGER.info("Publishing user joining information to other users...");
 
-		final List<Pair<String, String>> players = new ArrayList<>();
-		rooms.get(roomId).forEach(player -> {
-			players.add(player);
-		});
-
 		final ConnectionMessage message = new ConnectionMessage();
 		message.setType(MessageType.JOIN);
-		message.setPlayers(players);
+		message.setPlayers(new ArrayList<>(room.getFirst()));
 
 		simpMessagingTemplate.convertAndSend("/topic/" + roomId, message);
 		LOGGER.info("Joining user published");
