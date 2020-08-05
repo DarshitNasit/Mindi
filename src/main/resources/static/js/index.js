@@ -100,6 +100,8 @@ function connect(event) {
 	event.preventDefault();
 }
 function createSocket() {
+	document.getElementById("title").innerHTML = `Mindi - ${userName}`;
+
 	socket = new SockJS("/ng-knt");
 	stompClient = Stomp.over(socket);
 	stompClient.connect({}, () => {
@@ -227,7 +229,11 @@ async function CHANGE_HAND(data) {
 	if (winnerId % 2 === 0) changeScore(teamA, handsA, mindies, teamAMindies);
 	else changeScore(teamB, handsB, mindies, teamBMindies);
 
-	for (const player of players) document.getElementById(player.first).lastChild.src = '';
+	for (const player of players) {
+		const pointer = document.getElementById(player.first).lastChild;
+		pointer.src = '';
+		pointer.alt = '';
+	}
 
 	if (doneHands === totalHands) {
 		const winner = teamA.mindies.length > teamB.mindies.length ? "A" :
