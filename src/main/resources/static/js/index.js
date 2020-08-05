@@ -53,9 +53,18 @@ const valueMap = {
 	"HEARTS":0, "SPADES":1, "DIAMONDS":2, "CLUBS":3
 }
 
+const alterName = {
+	"S": "SPADES", "H": "HEARTS", "C": "CLUBS", "D": "DIAMONDS",
+	"SPADES": "S", "HEARTS": "H", "CLUBS": "C", "DIAMONDS": "D"
+}
+
 usernameForm.addEventListener('submit', connect, true);
 startGameButton.addEventListener('click', startNewGame, true);
 copyButton.addEventListener("click", copyText, true);
+window.addEventListener("beforeunload", (event) => {
+	event.returnValue = "If you refresh you will be out of game!";
+	return "If you refresh you will be out of game!";
+});
 
 function connect(event) {
 	userId = uuidv4();
@@ -168,6 +177,7 @@ function CHANGE_TURN(data) {
 	const previous = document.getElementById(players[data.previous].first);
 	previous.firstChild.classList.remove("current-turn");
 	previous.lastChild.src = `./images/${data.card.rank}${data.card.suit}.png`;
+	previous.lastChild.alt = `${data.card.rank} of ${alterName[data.card.suit]}`;
 	if (roomCreator === true)
 		hand.push({suit: data.card.suit, rank: data.card.rank, id: data.previous});
 
@@ -359,6 +369,7 @@ function displayCards() {
 		const new_card = document.createElement("img");
 		new_card.classList.add("dashboard-img");
 		new_card.src = `./images/${card.rank}${card.suit[0]}.png`;
+		new_card.alt = `${card.rank} of ${card.suit}`;
 
 		const new_card_a = document.createElement("a");
 		new_card_a.id = `${card.rank}${card.suit[0]}`;
